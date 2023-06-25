@@ -9,6 +9,8 @@ import "./auth.css"
 
 const Signup = () => {
 
+
+
     const [signupPayload, setSignupPayload] = useState({
         name: "",
         email: "",
@@ -22,12 +24,14 @@ const Signup = () => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(signupPayload)
+            body: JSON.stringify(signupPayload),
+
         })
             .then(response => response.json())
             .then(data => {
                 alert(data.message)
             })
+
     }
 
     return (

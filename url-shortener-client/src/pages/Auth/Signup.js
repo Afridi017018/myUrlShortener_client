@@ -6,6 +6,7 @@ import TextInput from '../../components/TextInput/TextInput';
 import img from "../../assets/image/logo.png"
 
 import "./auth.css"
+import { BASE_URL } from '../../services/helper';
 
 const Signup = () => {
 
@@ -19,21 +20,21 @@ const Signup = () => {
 
 
     const handleSignup = () => {
-        fetch(`http://localhost:4000/user/reg`, {
+        fetch(`${BASE_URL}/user/reg`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify(signupPayload),
 
         })
             .then(response => response.json())
             .then(data => {
                 alert(data.message)
-               if(data.value === "1")
-               {
-                navigate('/login')
-               }
+                if (data.value === "1") {
+                    navigate('/login')
+                }
             })
 
     }
@@ -87,7 +88,7 @@ const Signup = () => {
                         Already have an account? <Link to="/login">Login</Link>
                     </p>
 
-              
+
 
                 </div>
             </div>
@@ -96,3 +97,5 @@ const Signup = () => {
 };
 
 export default Signup;
+
+

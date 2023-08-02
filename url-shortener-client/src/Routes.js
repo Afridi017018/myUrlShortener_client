@@ -4,6 +4,7 @@ import PublicRoute from './components/RouteRestriction/PublicRoute';
 import Login from './pages/Auth/Login';
 import Signup from './pages/Auth/Signup';
 import Dashboard from './pages/Dashboard/Dashboard';
+import NotFound from './pages/NotFound/NotFound';
 import Profile from './pages/Profile/Profile';
 
 const MainRoutes = ({isLoggedIn , isLoading, setIsLoggedIn, userId}) => {
@@ -22,6 +23,7 @@ const MainRoutes = ({isLoggedIn , isLoading, setIsLoggedIn, userId}) => {
             <Route path='login' element={<Login setIsLoggedIn={setIsLoggedIn}/>} />
             </Route>
             
+            <Route path='*' element={<NotFound />} />
             
         </Routes>
     );

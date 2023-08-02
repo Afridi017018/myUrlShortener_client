@@ -76,8 +76,18 @@ cursor: pointer;
     }
 
 
-@media screen and (max-width:576px) {
+.notation-3{
+margin-left: 45px;
+}
+
+
+@media screen and (max-width:696px) {
     .info h1{
        font-size: 16px;
     }
+
+    .notation-3{
+        margin-left: 22px;
+        }
+        
 }

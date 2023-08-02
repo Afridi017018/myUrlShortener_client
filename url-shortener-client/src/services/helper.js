@@ -1,0 +1,1 @@
+export const BASE_URL = "https://fast-link-3jn5.onrender.com"

@@ -1,0 +1,20 @@
+.notFound{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+}
+
+.notFound img{
+    width: 500px;
+
+}
+
+@media screen and (max-width:575px)
+{
+    .notFound img{
+        width: 400px;
+
+    }
+}
+

@@ -1,4 +1,3 @@
-// import { response } from 'express';
 import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -8,11 +7,14 @@ import copy from 'copy-to-clipboard';
 import Button from '../../components/Button/Button';
 import TextInput from '../../components/TextInput/TextInput';
 import "./Dashboard.css"
+import { BASE_URL } from '../../services/helper';
 
 
 
 
 const Dashboard = ({ userId }) => {
+
+    const myToken = localStorage.getItem('token');
 
     const [addView, setAddView] = useState(false)
     const [isValidUrl, setIsValidUrl] = useState(false)
@@ -35,12 +37,15 @@ const Dashboard = ({ userId }) => {
         originalLink: ""
     })
 
+    const [copiedIndex, setCopiedIndex] = useState(-1);
+
     useEffect(() => {
         if (userId) {
-            fetch(`http://localhost:4000/url/urlData/${userId}`, {
+            fetch(`${BASE_URL}/url/urlData/${userId}`, {
                 method: "GET",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    'authorization': `Bearer ${myToken}`,
                 },
             })
                 .then(response => response.json())
@@ -52,34 +57,33 @@ const Dashboard = ({ userId }) => {
 
 
     const handleClick = () => {
-        if (!payload.originalLink){
+        if (!payload.originalLink) {
             setInvalidText(false)
             return alert("Original link is needed!")
         }
 
 
-        fetch(`http://localhost:4000/url/`, {
+        fetch(`${BASE_URL}/url/`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                'authorization': `Bearer ${myToken}`,
             },
             body: JSON.stringify({ ...payload, userId: userId })
         })
             .then(response => response.json())
             .then(data => {
-             if(data.isValidUrl)
-             {
-                // console.log(data.isValidUrl)
-                setIsValidUrl(true);
-                setInvalidText(false)
-                setShortUrl(`http://localhost:4000/url/${data.urlCode}`)
-             }
-             else{
-             setIsValidUrl(false);
-             setInvalidText(true)
-             }
-             
-                    
+                if (data.isValidUrl) {
+                    setIsValidUrl(true);
+                    setInvalidText(false)
+                    setShortUrl(`http://localhost:4000/url/${data.urlCode}`)
+                }
+                else {
+                    setIsValidUrl(false);
+                    setInvalidText(true)
+                }
+
+
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -102,7 +106,7 @@ const Dashboard = ({ userId }) => {
             <div className="dashboard__empty-state">
 
                 <TextInput label="Original Url" placeholder="https://www.google.com/" value={payload.originalLink} onChange={(val) => setPayload({ ...payload, originalLink: val })} />
-                <TextInput label="Name" placeholder="Name" value={payload.name} onChange={(val) => setPayload({ ...payload, name: val })} />
+                <TextInput label="Name" placeholder="Google" value={payload.name} onChange={(val) => setPayload({ ...payload, name: val })} />
 
                 <div className="dashboard__add-new-actions">
                     <Button onClick={handleClick} label="Generate a short url" />
@@ -138,18 +142,23 @@ const Dashboard = ({ userId }) => {
 
 
 
-    const handleClipboard = (shortLink)=>{
-
-        copy(shortLink)
-    }
+    const handleClipboard = (shortLink, index) => {
+        copy(shortLink);
+        setCopiedIndex(index);
+        setTimeout(() => {
+            setCopiedIndex(-1);
+        }, 1500);
+    };
 
 
     const handleUpdate = () => {
-        fetch(`http://localhost:4000/url/update-url`, {
+        fetch(`${BASE_URL}/url/update-url`, {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                'authorization': `Bearer ${myToken}`,
             },
+
             body: JSON.stringify({ ...eachUrl })
         })
             .then(response => response.json())
@@ -164,20 +173,22 @@ const Dashboard = ({ userId }) => {
 
     const handleUrlDelete = (urlCode) => {
 
-        const confirmed = window.confirm(`Are you sure you want to delete "http://localhost:4000/url/${urlCode}" ?`)
+        const confirmed = window.confirm(`Are you sure you want to delete "${BASE_URL}/url/${urlCode}" ?`)
 
         if (confirmed) {
-            fetch(`http://localhost:4000/url/delete-url`, {
+            fetch(`${BASE_URL}/url/delete-url`, {
                 method: "delete",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    'authorization': `Bearer ${myToken}`,
                 },
+
                 body: JSON.stringify({ urlCode })
             })
                 .then(response => response.json())
                 .then(data => {
-                    // alert(`Short Link ${data.message.urlCode} has been deleted!`)
-                    // console.log(data.data,"okok")
+                    alert(`Short Link ${data.message.urlCode} has been deleted!`)
+
                 })
                 .catch((error) => {
                     console.error('Error:', error);
@@ -189,9 +200,12 @@ const Dashboard = ({ userId }) => {
 
 
 
+
+
+
     return (
         <div className='dashboard'>
-            
+
             {
                 addView ? addNewUrl() : emptyUrl()
             }
@@ -199,16 +213,21 @@ const Dashboard = ({ userId }) => {
                 addView &&
                 <div>
 
-                 {isValidUrl ?
-                <div className='shortUrl'>  
-                <p>{shortUrl}</p> {shortUrl && <button className='clipboard-button'>
-                <FaClone onClick={()=>handleClipboard(shortUrl)}/></button>}
-                </div>
-                :
-                <div className='invalidUrl'>  
-                 {invalidText && <p>Invalid url !</p>}
-                </div>
-                }
+                    {isValidUrl ?
+                        <div className='shortUrl'>
+                            <p>{shortUrl}</p> {shortUrl && <button className='clipboard-button'>
+                                <FaClone onClick={() => handleClipboard(shortUrl, -2)} /></button>
+
+                            }
+                            {copiedIndex === -2 && (
+                                <span className="copied-text">Copied</span>
+                            )}
+                        </div>
+                        :
+                        <div className='invalidUrl'>
+                            {invalidText && <p>Given original url is invalid !</p>}
+                        </div>
+                    }
 
                 </div>
             }
@@ -225,7 +244,7 @@ const Dashboard = ({ userId }) => {
                         <TextInput label="Original Link" placeholder="https://www.abc.com/" value={eachUrl.originalLink} onChange={(val) => setEachUrl({ ...eachUrl, originalLink: val })} />
                         <div className="modal-update-button">
                             <button onClick={handleUpdate} className='modal-update-button-1'>Update</button>
-                            <button onClick={closeModal} className='modal-update-button-2'>Cancel</button>
+                            <button onClick={closeModal} className='modal-cancel-button-2'>Cancel</button>
                         </div>
                     </Modal>
                 }
@@ -247,11 +266,17 @@ const Dashboard = ({ userId }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {urlsData.map((item) =>
+                                {urlsData.map((item, index) =>
+
+
                                     <tr key={item.id}>
-                                        <td>{item.name} </td>
+                                        <td className='itemName'>{item.name} </td>
                                         <td><a href={item.originalLink}>{item.originalLink}</a> </td>
-                                        <td><a href={`http://localhost:4000/url/${item.urlCode}`}>http://localhost:4000/url/{item.urlCode}</a> <button className='clipboard-button'><FaClone onClick={()=>handleClipboard(`http://localhost:4000/url/${item.urlCode}`)}/></button></td>
+                                        <td><a href={`${BASE_URL}/url/${item.urlCode}`}>{BASE_URL}/url/{item.urlCode}</a> <button className='clipboard-button'><FaClone onClick={() => handleClipboard(`${BASE_URL}/url/${item.urlCode}`, index)} /></button>
+                                            {copiedIndex === index && (
+                                                <span className="copied-text">Copied</span>
+                                            )}
+                                        </td>
                                         <td>{item.visitCount} </td>
                                         <td>{item.createdAt} </td>
                                         <td><div className="action-buttons"><button className='action-button-1' onClick={() => openModal(item)}>Update</button> <button className='action-button-2' onClick={() => handleUrlDelete(item.urlCode)}>Delete</button> </div></td>
@@ -262,9 +287,11 @@ const Dashboard = ({ userId }) => {
                     </div>
 
                 </div>}
-               
+
         </div>
     );
 };
 
 export default Dashboard;
+
+

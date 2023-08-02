@@ -1,7 +1,7 @@
 import React from 'react';
 import './TextInput.css'
 
-const TextInput = ({ label, placeholder, onChange,type, value }) => {
+const TextInput = ({ label, placeholder, onChange, type, value }) => {
     return (
         <div className='text-input'>
 
@@ -11,7 +11,7 @@ const TextInput = ({ label, placeholder, onChange,type, value }) => {
                 type={type}
                 placeholder={placeholder}
                 onChange={(e) => onChange(e.target.value)}
-                value = {value}
+                value={value}
             />
         </div>
     );

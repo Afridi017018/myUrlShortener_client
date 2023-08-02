@@ -3,7 +3,7 @@ import React from 'react';
 import './Appbar.css'
 import img from '../../assets/image/logo.png'
 import { Link, useNavigate } from 'react-router-dom';
-import { BASE_URL } from '../../services/helper';
+
 
 
 const Appbar = ({ isLoggedIn, setIsLoggedIn }) => {

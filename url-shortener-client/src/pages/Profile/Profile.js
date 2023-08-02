@@ -32,28 +32,27 @@ const Profile = () => {
 
   const [ipAddress, setIpAddress] = useState("")
 
-  const userDataFetching = () => {
-    fetch(`${BASE_URL}/user/check-login`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'authorization': `Bearer ${myToken}`,
-      },
-      // credentials: 'include'
-    })
-      .then(response => response.json())
-      .then(data => {
-        // console.log(data)
-        setUserInfo({ ...userInfo, id: data.id, image: data.image, name: data.name, email: data.email })
-
-      });
-  }
+  
 
   useEffect(() => {
 
-    userDataFetching();
+   
+      fetch(`${BASE_URL}/user/check-login`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': `Bearer ${myToken}`,
+        },
+     
+      })
+        .then(response => response.json())
+        .then(data => {
+          setUserInfo({ ...userInfo, id: data.id, image: data.image, name: data.name, email: data.email })
+  
+        });
+  
 
-  }, []);
+  }, [myToken,userInfo]);
 
 
 
@@ -96,13 +95,12 @@ const Profile = () => {
         "Content-Type": "application/json",
         'authorization': `Bearer ${myToken}`,
       },
-      // credentials: "include",
+
       body: JSON.stringify({ ...updateUserInfo })
     })
       .then(response => response.json())
       .then(data => {
         alert(data.message);
-        userDataFetching()
         setUpdateModalIsOpen(false);
       })
       .catch((error) => {
@@ -120,7 +118,6 @@ const Profile = () => {
   const closeChangePasswordModal = () => {
     setChangePasswordIsOpen(false);
     setChangePassword({ ...changePassword, newPass: "", oldPass: "" });
-    userDataFetching();
   }
 
 

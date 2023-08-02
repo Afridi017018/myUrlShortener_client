@@ -32,7 +32,7 @@ function App() {
         setIsLoading(false);
 
       });
-  }, [isLoggedIn]);
+  }, [myToken]);
   return (
     <div className='app'>
       <Appbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />

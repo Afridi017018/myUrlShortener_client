@@ -53,7 +53,7 @@ const Dashboard = ({ userId }) => {
                     setUrlsData(data);
                 });
         }
-    }, [userId, urlsData])
+    }, [userId, myToken])
 
 
     const handleClick = () => {

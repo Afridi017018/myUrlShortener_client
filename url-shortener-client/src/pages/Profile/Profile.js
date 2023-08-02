@@ -178,7 +178,7 @@ const Profile = () => {
           <div className="info">
             <h1>Name <span className='notation-1'>:</span> {userInfo.name}</h1>
             <h1>Email <span className='notation-2'>:</span> {userInfo.email}</h1>
-            <h1>IP <span className='notation-3'>:</span> {ipAddress}</h1>
+            <h1>IP <span className='notation-3'>:</span> {ipAddress ? <>{ipAddress}</> : <small>Loading...</small>}</h1>
           </div>
         </div>
 

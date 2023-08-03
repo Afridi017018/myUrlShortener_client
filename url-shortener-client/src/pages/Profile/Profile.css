@@ -80,6 +80,14 @@ cursor: pointer;
 margin-left: 45px;
 }
 
+.info h1 img{
+    width: 20px;
+    margin-left:10px;
+
+
+  
+   
+}
 
 @media screen and (max-width:696px) {
     .info h1{
@@ -88,6 +96,10 @@ margin-left: 45px;
 
     .notation-3{
         margin-left: 22px;
+        }
+
+        .info h1 img{
+            width: 13px;
         }
         
 }

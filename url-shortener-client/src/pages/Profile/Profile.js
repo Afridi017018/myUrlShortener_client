@@ -176,9 +176,12 @@ const Profile = () => {
 
         <div className="info-div">
           <div className="info">
-            <h1>Name <span className='notation-1'>:</span> {userInfo.name}</h1>
-            <h1>Email <span className='notation-2'>:</span> {userInfo.email}</h1>
-            <h1>IP <span className='notation-3'>:</span> {ipAddress ? <>{ipAddress}</> : <small>Loading...</small>}</h1>
+          <h1>Name <span className='notation-1'>:</span> {userInfo.name ? <>{userInfo.name}</> : <img src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" alt="" /> }</h1>
+
+            <h1>Email <span className='notation-2'>:</span> {userInfo.email ? <>{userInfo.email}</> : <img src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" alt="" /> }</h1>
+   
+          <h1>IP <span className='notation-3'>:</span> {ipAddress ? <>{ipAddress}</> : <img src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" alt="" /> }</h1>
+    
           </div>
         </div>
 

@@ -76,7 +76,7 @@ const Dashboard = ({ userId }) => {
                 if (data.isValidUrl) {
                     setIsValidUrl(true);
                     setInvalidText(false)
-                    setShortUrl(`http://localhost:4000/url/${data.urlCode}`)
+                    setShortUrl(`${BASE_URL}/url/${data.urlCode}`)
                 }
                 else {
                     setIsValidUrl(false);
